@@ -10,3 +10,4 @@ This is a very very basic web-app that does the following:
 
 ##### Note: Other implementation details can be found in the code as comments.
 
+##### It's more focussed towards maps api. CSS is not the focus here(the inputs and buttons).

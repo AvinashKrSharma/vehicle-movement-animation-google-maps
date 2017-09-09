@@ -8,10 +8,8 @@ var endLocation = [];
 var timerHandle = [];
 var infoWindow = null;
 
-var startLoc = new Array();
-startLoc[0] = 'Gurugram';
-var endLoc = new Array();
-endLoc[0] = 'Vasant Kunj';
+var startLoc = [];
+var endLoc = [];
 
 var lastVertex = 1;
 var step = 50; // 5; // metres
@@ -62,8 +60,36 @@ function createMarker(latlng, label, html) {
     return marker;
 }
 
+function toggleError(msg){
+    document.getElementById('error-msg').innerText = msg;
+}
+
 // Using Directions Service find the route between the starting and ending points
 function setRoutes() {
+    // empty out the error msg
+    toggleError("");
+    // set the values and check if any is empty, and if yes, show error and return
+    var startVal = document.getElementById("start").value
+    var endVal = document.getElementById("end").value;
+    if (!startVal || !endVal){
+        toggleError( "Please enter both start and end locations.");
+        return;
+    }
+    // just to avoid weird case of same start and end location
+    if (startVal === endVal){
+        toggleError( "Please enter different locations in both inputs");
+        return;
+    }
+    startLoc.push(startVal);
+    endLoc.push(endVal);
+    
+    // empty out previous values
+    startLocation = [];
+    endLocation = [];
+    polyLine = [];
+    poly2 = [];
+    timerHandle = [];
+
     var directionsDisplay = new Array();
     for (var i = 0; i < startLoc.length; i++) {
         var rendererOptions = {
@@ -91,6 +117,10 @@ function makeRouteCallback(routeNum, disp, rendererOptions) {
     }
     return function (response, status) {
         // if directions service successfully returns and no polylines exist already, then do the following
+        if (status == google.maps.DirectionsStatus.ZERO_RESULTS){
+            toggleError("No routes available for selected locations");
+            return;
+        }
         if (status == google.maps.DirectionsStatus.OK) {
             startLocation[routeNum] = new Object();
             endLocation[routeNum] = new Object();
@@ -131,10 +161,12 @@ function makeRouteCallback(routeNum, disp, rendererOptions) {
                 }
             }
         }
-        // render the line to map
-        polyLine[routeNum].setMap(map);
-        // and start animation
-        startAnimation(routeNum);
+        if (polyLine[routeNum]){
+            // render the line to map
+            polyLine[routeNum].setMap(map);
+            // and start animation
+            startAnimation(routeNum);
+        }
     }
 }
 

@@ -6,3 +6,15 @@ body{
     margin: 0px;
     font-family: Helvetica,Arial;
 }
+#error-msg{
+    color: red;
+}
+#start-btn{
+    border-radius: 0;
+    border: none;
+    color: white;
+    margin: 20px 0;
+    background-color: blue;
+    height: 30px;
+    width: 70px;
+}
