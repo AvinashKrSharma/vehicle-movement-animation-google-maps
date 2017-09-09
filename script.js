@@ -66,6 +66,7 @@ function toggleError(msg){
 
 // Using Directions Service find the route between the starting and ending points
 function setRoutes() {
+    map && initialize();
     // empty out the error msg
     toggleError("");
     // set the values and check if any is empty, and if yes, show error and return
@@ -80,8 +81,8 @@ function setRoutes() {
         toggleError( "Please enter different locations in both inputs");
         return;
     }
-    startLoc.push(startVal);
-    endLoc.push(endVal);
+    startLoc[0] = startVal;
+    endLoc[0] = endVal;
     
     // empty out previous values
     startLocation = [];
